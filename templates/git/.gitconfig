@@ -1,0 +1,16 @@
+[user]
+	name =  {{ my_first_name }} {{ my_last_name }}
+	email = {{ my_email }}
+[alias]
+	oneline = log --pretty=oneline --abbrev-commit --graph --decorate=short --remotes --branches
+	st = status
+[pull]
+	rebase = true
+[core]
+	editor = vi
+[help]
+	autoCorrect = prompt
+[merge]
+	tool = meld
+[init]
+	defaultBranch = main

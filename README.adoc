@@ -1,0 +1,47 @@
+= laptop-as-code-role-base
+Basic installation
+
+== Requirements
+None
+
+== Default Role Variables
+ifeval::[{safe-mode-level} < 20]
+[source, yaml]
+----
+include::defaults/main.yml[]
+----
+endif::[]
+ifeval::[{safe-mode-level} >= 20]
+link:defaults/main.yml[]
+endif::[]
+
+== Role Variables
+ifeval::[{safe-mode-level} < 20]
+[source, yaml]
+----
+include::vars/main.yml[]
+----
+endif::[]
+ifeval::[{safe-mode-level} >= 20]
+link:vars/main.yml[]
+endif::[]
+
+== Dependencies
+None
+
+== Example Playbook
+ifeval::[{safe-mode-level} < 20]
+[source, yaml]
+----
+include::tests/test.yml[]
+----
+endif::[]
+ifeval::[{safe-mode-level} >= 20]
+link:tests/test.yml[]
+endif::[]
+
+== License
+Apache-2.0
+
+== Author Information
+https://github.com/mrebiai

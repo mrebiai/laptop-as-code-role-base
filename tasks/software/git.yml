@@ -1,0 +1,76 @@
+- name: Git - Key
+  tags: git
+  become: true
+  apt_key:
+    keyserver: hkp://keyserver.ubuntu.com
+    id: E1DD270288B4E6030699E45FA1715D88E1DF1F24
+    keyring: /usr/share/keyrings/ppa-git.gpg
+    state: present
+
+- name: Git - Get architecture
+  tags: git
+  shell: dpkg --print-architecture
+  register: architecture
+
+- name: Git - Repository
+  tags: git
+  become: true
+  apt_repository:
+    repo: deb [arch={{ architecture.stdout }} signed-by=/usr/share/keyrings/ppa-git.gpg] https://ppa.launchpadcontent.net/git-core/ppa/ubuntu {{ ansible_distribution_release }} main
+    filename: ppa-git
+    state: present
+
+- name: Git - Installation
+  tags: git
+  become: true
+  apt:
+    name:
+      - git
+      - git-gui
+      - tig
+      - meld
+    state: latest
+    update_cache: yes
+
+- name: Git - Copy .gitconfig
+  tags: git
+  template:
+    src: templates/git/.gitconfig
+    dest: ~/.gitconfig
+
+- name: Git - Create directory
+  tags: git
+  become: true
+  file:
+    path: /usr/share/scripts
+    state: directory
+
+- name: Git - Clone git-prompt
+  tags: git
+  become: true
+  git:
+    repo: "https://github.com/magicmonty/bash-git-prompt.git"
+    dest: /usr/share/scripts/bash-git-prompt
+    version: "{{ bash_git_prompt.version }}"
+
+- name: Git - Execution rights git-prompt
+  tags: git
+  become: true
+  file:
+    path: /usr/share/scripts/bash-git-prompt/gitprompt.sh
+    mode: u+x,g+x,o+x
+  notify: "Bashrc - Source"
+
+- name: Git - Ensure presence of bashrc
+  tags: git
+  file: state=touch path=~/.bashrc
+
+- name: Git - Set GIT_PROMPT_ONLY_IN_REPO=1
+  tags: git
+  lineinfile: dest=~/.bashrc regexp="GIT_PROMPT_ONLY_IN_REPO" line='GIT_PROMPT_ONLY_IN_REPO=1'
+  notify: "Bashrc - Source"
+
+- name: Git - Set gitprompt.sh
+  tags: git
+  lineinfile: dest=~/.bashrc regexp="gitprompt\.sh" line='source /usr/share/scripts/bash-git-prompt/gitprompt.sh'
+  notify: "Bashrc - Source"

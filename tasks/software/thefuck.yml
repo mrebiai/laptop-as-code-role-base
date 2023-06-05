@@ -1,0 +1,24 @@
+- name: Thefuck - Installation 22.04
+  tags: thefuck
+  become: true
+  apt:
+    name: thefuck
+    state: present
+    update_cache: yes
+  when: ansible_distribution == 'Ubuntu' and ansible_distribution_version == '22.04'
+
+- name: Thefuck - Installation 20.04
+  become: true
+  pip:
+    name: thefuck
+  when: ansible_distribution == 'Ubuntu' and ansible_distribution_version == '20.04'
+
+- name: Thefuck - Ensure presence of bashrc
+  tags: thefuck
+  file: state=touch path=~/.bashrc
+
+- name: Thefuck - Add thefuck in .bashrc
+  tags: thefuck
+  lineinfile: dest=~/.bashrc regexp="thefuck" line='eval "$(thefuck --alias)"'
+  notify: "Bashrc - Source"
+

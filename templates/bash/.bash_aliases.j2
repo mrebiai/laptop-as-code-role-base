@@ -1,0 +1,6 @@
+# OS
+alias os_upd='ansible-galaxy install git+{{ my_role_version }} --force-with-deps && ansible-pull -U github.com:mrebiai/laptop-as-code-playbook.git -K'
+alias open='xdg-open &>/dev/null'
+
+# SSH
+alias ssha='eval $(ssh-agent) && ssh-add'

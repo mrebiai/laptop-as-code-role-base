@@ -1,0 +1,48 @@
+---
+- name: Bash - Add .bash_aliases
+  tags: bash
+  template:
+    src: templates/bash/.bash_aliases.j2
+    dest: ~/.bash_aliases
+
+- name: Bash - Apt Common Installations
+  tags: bash
+  become: true
+  apt:
+    name:
+      - vim
+      - jq
+      - terminator
+      - kakoune
+      - ranger
+      - aspell-fr
+      - wget
+      - curl
+      - httpie
+    state: latest
+    update_cache: yes
+
+- name: Bash - Create directory terminator
+  tags: bash
+  file:
+    path: ~/.config/terminator
+    state: directory
+
+- name: Bash - Copy config terminator
+  tags: bash
+  copy:
+    src: files/bash/terminator-config
+    dest: ~/.config/terminator/config
+
+- name: Bash - Ensure presence of bashrc
+  tags: bash
+  file: state=touch path=~/.bashrc
+
+- name: Bash - Ensure presence of .my-credentials
+  tags: bash
+  file: state=touch path=~/.my-credentials mode=600
+
+- name: Bash - Source .my-credentials in .bashrc
+  tags: bash
+  lineinfile: dest=~/.bashrc regexp="my-credentials" line='source ~/.my-credentials'
+  notify: "Bashrc - Source"

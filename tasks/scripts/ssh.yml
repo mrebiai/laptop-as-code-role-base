@@ -1,0 +1,6 @@
+---
+- name: Ssh - Copy config
+  tags: ssh
+  template:
+    src: templates/ssh/config.j2
+    dest: ~/.ssh/config

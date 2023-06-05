@@ -1,0 +1,8 @@
+---
+# scripts
+- import_tasks: scripts/ssh.yml
+# software
+- import_tasks: software/bash.yml
+- import_tasks: software/git.yml
+- import_tasks: software/thefuck.yml
+
